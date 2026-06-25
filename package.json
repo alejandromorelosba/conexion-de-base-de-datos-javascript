@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/alejandromorelosba/conexion-de-base-de-datos-javascript/issues"
   },
-  "homepage": "https://github.com/alejandromorelosba/conexion-de-base-de-datos-javascript#readme"
+  "homepage": "https://github.com/alejandromorelosba/conexion-de-base-de-datos-javascript#readme",
+  "dependencies": {
+    "dotenv": "^17.4.2"
+  }
 }
