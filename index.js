@@ -6,6 +6,12 @@ const pool = new Pool({
     ssl: { rejectUnauthorized: false },
 });
 
+const formatoColombiano = new Intl.NumberFormat("es-CO", {
+    style: "currency",
+    currency: "COP",
+    minimumFractionDigits: 0,
+});
+
 async function conexion() {
     const resultados = await pool.query('SELECT * FROM public."Productos"');
     console.log(resultados.rows);
@@ -21,10 +27,27 @@ async function Crear(name, description, Img, Price) {
     );
 }
 
+async function listar() {
+    const resultado = await pool.query('SELECT * FROM public."Productos"');
+    resultado.rows.forEach(producto => {
+        console.log(
+            `El producto ${producto.id} con nombre ${producto.name} cuesta ${formatoColombiano.format(parseInt(producto.Price, 10))}`
+        );
+    });
+}
+
+async function eliminar(id) {
+    await pool.query(
+        'DELETE FROM public."Productos" WHERE id = $1',
+        [id]
+    );
+    console.log(`Se ha eliminado el producto con el ID: ${id}`);
+}
+    
+
 async function main() {
     try {
-        await conexion();
-        await Crear("jamon", "este es un jamon", "https://imagen.com/jamon.png", "20000");
+        
     } catch (error) {
         console.error("Error:", error.message);
     } finally {
