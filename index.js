@@ -7,15 +7,29 @@ const pool = new Pool({
 });
 
 async function conexion() {
+    const resultados = await pool.query('SELECT * FROM public."Productos"');
+    console.log(resultados.rows);
+}
+
+async function Crear(name, description, Img, Price) {
+    await pool.query(
+        'INSERT INTO public."Productos" (name, description, "Img", "Price") VALUES ($1, $2, $3, $4)',
+        [name, description, Img, Price],
+    );
+    console.log(
+        `Se ha insertado nombre: ${name}, descripcion: ${description}, Img: ${Img}, Price: ${Price}`,
+    );
+}
+
+async function main() {
     try {
-        const resultados = await pool.query('SELECT * FROM public."Productos"');
-        console.log(resultados.rows);
+        await conexion();
+        await Crear("jamon", "este es un jamon", "https://imagen.com/jamon.png", "20000");
     } catch (error) {
-        console.error("Error al conectar a PostgreSQL:", error.message);
+        console.error("Error:", error.message);
     } finally {
-        await pool.end();
+        await pool.end(); // ✅ Se cierra una sola vez
     }
 }
 
-conexion();
-
+main();
